@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+  <color name="dialer_toolbar_title_text">@color/background_dialer_white</color>
+  <color name="dialer_toolbar_subtitle_text">@color/background_dialer_white</color>
+</resources>
