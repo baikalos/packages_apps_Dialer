@@ -12,16 +12,16 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="other_settings_label">Другие настройки</string>
+    <string name="other_settings_label">Altre impostazioni</string>
 
     <!-- Dialer postcall -->
-    <string name="enable_post_call_title">Уведомление после звонка</string>
-    <string name="enable_post_call_summary">Включить уведомление внизу экрана после звонка</string>
+    <string name="enable_post_call_title">Post chiamata</string>
+    <string name="enable_post_call_summary">Abilita le notifiche di post-chiamata nella parte inferiore dello schermo</string>
 
-    <string name="call_recording_category_title">Запись вызова</string>
-    <string name="call_recording_format">Формат аудио</string>
-    <string name="auto_call_recording_title">Автозапись разговора</string>
+    <string name="call_recording_category_title">Registrazione delle chiamate</string>
+    <string name="call_recording_format">Formato audio</string>
+    <string name="auto_call_recording_title">Registrazione automatica alla chiamata</string>
 
     <!-- Proximity -->
-    <string name="disable_proximity_sensor_title">Отключить датчик приближения</string>
+    <string name="disable_proximity_sensor_title">Disabilita il sensore di prossimità</string>
 </resources>

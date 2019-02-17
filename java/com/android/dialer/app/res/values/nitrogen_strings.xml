@@ -26,4 +26,7 @@
     <string name="aac_format" translatable="false">AAC</string>
     <string name="auto_call_recording_title">Auto call recording</string>
     <string name="auto_call_recording_key" translatable="false">auto_call_recording</string>
+
+    <!-- Proximity -->
+    <string name="disable_proximity_sensor_title">Disable proximity sensor</string>
 </resources>
