@@ -98,6 +98,25 @@ public class CallButtonPresenter
     }
   };
 
+  private CallRecorder.RecordingProgressListener recordingProgressListener =
+      new CallRecorder.RecordingProgressListener() {
+    @Override
+    public void onStartRecording() {
+      inCallButtonUi.setCallRecordingState(true);
+      inCallButtonUi.setCallRecordingDuration(0);
+    }
+
+    @Override
+    public void onStopRecording() {
+      inCallButtonUi.setCallRecordingState(false);
+    }
+
+    @Override
+    public void onRecordingTimeProgress(final long elapsedTimeMs) {
+      inCallButtonUi.setCallRecordingDuration(elapsedTimeMs);
+    }
+  };
+
   public CallButtonPresenter(Context context) {
     this.context = context.getApplicationContext();
   }
@@ -360,6 +379,29 @@ public class CallButtonPresenter
        }
      }
    }
+      final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+      boolean warningPresented = prefs.getBoolean(KEY_RECORDING_WARNING_PRESENTED, false);
+      if (!warningPresented) {
+        new AlertDialog.Builder(getActivity())
+            .setTitle(R.string.recording_warning_title)
+            .setMessage(R.string.recording_warning_text)
+            .setPositiveButton(R.string.onscreenCallRecordText, (dialog, which) -> {
+              prefs.edit()
+                  .putBoolean(KEY_RECORDING_WARNING_PRESENTED, true)
+                  .apply();
+              startCallRecordingOrAskForPermission();
+            })
+            .setNegativeButton(android.R.string.cancel, null)
+            .show();
+      } else {
+        startCallRecordingOrAskForPermission();
+      }
+    } else {
+      if (recorder.isRecording()) {
+        recorder.finishRecording();
+      }
+    }
+  }
 
   private void startCallRecordingOrAskForPermission() {
     if (hasAllPermissions(CallRecorder.REQUIRED_PERMISSIONS)) {

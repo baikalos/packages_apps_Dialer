@@ -15,6 +15,7 @@
  */
 package com.android.dialer.app.list;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.READ_CONTACTS;
 
 import android.app.Activity;
@@ -33,6 +34,8 @@ import com.android.dialer.common.LogUtil;
 import com.android.dialer.common.concurrent.DialerExecutor;
 import com.android.dialer.common.concurrent.DialerExecutor.Worker;
 import com.android.dialer.common.concurrent.DialerExecutorComponent;
+import com.android.dialer.lookup.LookupCache;
+import com.android.dialer.lookup.LookupSettings;
 import com.android.dialer.phonenumbercache.CachedNumberLookupService;
 import com.android.dialer.phonenumbercache.CachedNumberLookupService.CachedContactInfo;
 import com.android.dialer.phonenumbercache.PhoneNumberCache;
@@ -46,6 +49,7 @@ public class RegularSearchFragment extends SearchFragment
         FragmentCompat.OnRequestPermissionsResultCallback {
 
   public static final int PERMISSION_REQUEST_CODE = 1;
+  private static final int ACCESS_FINE_LOCATION_PERMISSION_REQUEST_CODE = 2;
 
   private static final int SEARCH_DIRECTORY_RESULT_LIMIT = 5;
   protected String permissionToRequest;
@@ -54,6 +58,19 @@ public class RegularSearchFragment extends SearchFragment
 
   public RegularSearchFragment() {
     configureDirectorySearch();
+  }
+
+  @Override
+  public void onStart() {
+   super.onStart();
+   if (LookupSettings.isForwardLookupEnabled(getActivity())
+       || LookupSettings.isPeopleLookupEnabled(getActivity())) {
+     if (getActivity().checkSelfPermission(ACCESS_FINE_LOCATION)
+         != PackageManager.PERMISSION_GRANTED) {
+           requestPermissions(new String[]{ACCESS_FINE_LOCATION},
+               ACCESS_FINE_LOCATION_PERMISSION_REQUEST_CODE);
+     }
+   }
   }
 
   public void configureDirectorySearch() {
@@ -94,12 +111,13 @@ public class RegularSearchFragment extends SearchFragment
   protected void cacheContactInfo(int position) {
     CachedNumberLookupService cachedNumberLookupService =
         PhoneNumberCache.get(getContext()).getCachedNumberLookupService();
+    final RegularSearchListAdapter adapter = (RegularSearchListAdapter) getAdapter();
     if (cachedNumberLookupService != null) {
-      final RegularSearchListAdapter adapter = (RegularSearchListAdapter) getAdapter();
       CachedContactInfo cachedContactInfo =
           adapter.getContactInfo(cachedNumberLookupService, position);
       addContactTask.executeSerial(cachedContactInfo);
     }
+    LookupCache.cacheContact(getContext(), adapter.getLookupContactInfo(position));
   }
 
   @Override

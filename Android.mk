@@ -124,7 +124,7 @@ LOCAL_STATIC_JAVA_LIBRARIES := \
 	libbackup \
 	legacy-test \
 	libphonenumber \
-	volley \
+	volley
 
 LOCAL_STATIC_ANDROID_LIBRARIES := \
 	android-support-core-ui \
@@ -169,6 +169,9 @@ LOCAL_PROGUARD_FLAG_FILES := $(call all-named-files-under,proguard.*flags,$(BASE
 LOCAL_PROGUARD_ENABLED := custom
 
 LOCAL_PROGUARD_ENABLED += optimization
+else
+LOCAL_PROGUARD_ENABLED := disabled
+LOCAL_DX_FLAGS := --multi-dex
 endif
 
 # End Bug: 37077388
